@@ -11,14 +11,9 @@ require (
 	github.com/decred/dcrd/lru v1.0.0
 	github.com/fsnotify/fsnotify v1.5.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/hpcloud/tail v1.0.0 // indirect
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/jrick/logrotate v1.0.0
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
-	gopkg.in/fsnotify.v1 v1.4.7 // indirect
-	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 )
 
 go 1.14
-
-replace github.com/btcsuite/btcd => github.com/keithzetterstrom/btcd v0.22.1-beta
