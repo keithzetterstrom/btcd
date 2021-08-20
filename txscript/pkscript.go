@@ -35,6 +35,8 @@ const (
 	// key.
 	compressedPubKeyLen = 33
 
+	maxPubKeyHashSigScriptLenWithUncompressedPubKey = 1 + 72 + 1 + 1 + 65
+
 	// uncompressedPubKeyLen is the length in bytes of an uncompressed public
 	// key.
 	uncompressedPubKeyLen = 65
@@ -188,13 +190,26 @@ func computeNonWitnessPkScript(sigScript []byte) (PkScript, error) {
 	// represent a P2PKH script, then we'll attempt to parse the compressed
 	// public key from it.
 	case len(sigScript) >= minPubKeyHashSigScriptLen &&
-		len(sigScript) <= maxPubKeyHashSigScriptLen:
+		len(sigScript) <= maxPubKeyHashSigScriptLenWithUncompressedPubKey:
 
 		// The public key should be found as the last part of the
 		// signature script. We'll attempt to parse it to ensure this is
 		// a P2PKH redeem script.
 		pubKey := sigScript[len(sigScript)-compressedPubKeyLen:]
-		if btcec.IsCompressedPubKey(pubKey) {
+		if len(sigScript) <= maxPubKeyHashSigScriptLen && btcec.IsCompressedPubKey(pubKey) {
+			pubKeyHash := hash160(pubKey)
+			script, err := payToPubKeyHashScript(pubKeyHash)
+			if err != nil {
+				return PkScript{}, err
+			}
+
+			pkScript := PkScript{class: PubKeyHashTy}
+			copy(pkScript.script[:], script)
+			return pkScript, nil
+		}
+
+		pubKey = sigScript[len(sigScript)-uncompressedPubKeyLen:]
+		if len(pubKey) == uncompressedPubKeyLen && (pubKey[0]&^byte(0x1) == byte(0x4)) {
 			pubKeyHash := hash160(pubKey)
 			script, err := payToPubKeyHashScript(pubKeyHash)
 			if err != nil {
