@@ -35,6 +35,10 @@ const (
 	// key.
 	compressedPubKeyLen = 33
 
+	// uncompressedPubKeyLen is the length in bytes of an uncompressed public
+	// key.
+	uncompressedPubKeyLen = 33
+
 	// pubKeyHashLen is the length of a P2PKH script.
 	pubKeyHashLen = 25
 
