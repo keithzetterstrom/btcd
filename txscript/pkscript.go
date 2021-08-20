@@ -37,7 +37,7 @@ const (
 
 	// uncompressedPubKeyLen is the length in bytes of an uncompressed public
 	// key.
-	uncompressedPubKeyLen = 33
+	uncompressedPubKeyLen = 65
 
 	// pubKeyHashLen is the length of a P2PKH script.
 	pubKeyHashLen = 25
@@ -280,4 +280,8 @@ func ripemd160h(data []byte) []byte {
 	h := ripemd160.New()
 	h.Write(data)
 	return h.Sum(nil)
+}
+
+func GetUncompressedPKLen() int {
+	return uncompressedPubKeyLen
 }
