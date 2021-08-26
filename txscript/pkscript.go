@@ -196,7 +196,7 @@ func computeNonWitnessPkScript(sigScript []byte) (PkScript, error) {
 		// signature script. We'll attempt to parse it to ensure this is
 		// a P2PKH redeem script.
 		pubKey := sigScript[len(sigScript)-compressedPubKeyLen:]
-		if len(sigScript) <= maxPubKeyHashSigScriptLen {
+		if len(sigScript) <= maxPubKeyHashSigScriptLen && btcec.IsCompressedPubKey(pubKey) {
 			pubKeyHash := hash160(pubKey)
 			script, err := payToPubKeyHashScript(pubKeyHash)
 			if err != nil {
